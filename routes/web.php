@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SellerDashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Главная страница
@@ -8,20 +11,21 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Дашборд для администратора
-Route::get('/admin/dashboard', function () {
-    return view('dashboard.admin.dashboard');
-})->middleware(['auth', 'role:admin'])->name('admin.dashboard');
+Route::prefix('dashboard')->middleware(['auth'])->group(function () {
+    Route::get('/admin', [AdminDashboardController::class, 'index'])
+        ->middleware('role:admin')
+        ->name('admin.dashboard');
 
-// Дашборд для продавца
-Route::get('/seller/dashboard', function () {
-    return view('dashboard.seller.dashboard');
-})->middleware(['auth', 'role:seller'])->name('seller.dashboard');
+    Route::get('/seller', [SellerDashboardController::class, 'index'])
+        ->middleware('role:seller')
+        ->name('seller.dashboard');
 
-// Дашборд для покупателя
-Route::get('/customer/dashboard', function () {
-    return view('dashboard.customer.dashboard');
-})->middleware(['auth', 'role:customer'])->name('customer.dashboard');
+    Route::get('/customer', [CustomerDashboardController::class, 'index'])
+        ->middleware('role:customer')
+        ->name('customer.dashboard');
+});
+
+
 
 // Группа маршрутов для профиля
 Route::middleware('auth')->group(function () {
