@@ -25,8 +25,6 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
         ->name('customer.dashboard');
 });
 
-
-
 // Группа маршрутов для профиля
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
