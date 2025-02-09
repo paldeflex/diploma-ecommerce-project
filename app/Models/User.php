@@ -36,6 +36,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $attributes = [
+        'role' => RoleEnum::CUSTOMER->value,
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -44,6 +48,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'role' => RoleEnum::class,
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];

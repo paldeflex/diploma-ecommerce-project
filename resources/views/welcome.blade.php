@@ -1,3 +1,19 @@
+@php
+    function getDashboardRoute()
+    {
+        if (Auth::check()) {
+            return match (Auth::user()->role) {
+                \App\Enums\RoleEnum::ADMIN => route('admin.dashboard'),
+                \App\Enums\RoleEnum::SELLER => route('seller.dashboard'),
+                \App\Enums\RoleEnum::CUSTOMER => route('customer.dashboard'),
+                default => route('home'),
+            };
+        }
+
+        return route('home');
+    }
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -31,10 +47,7 @@
                         @if (Route::has('login'))
                             <nav class="-mx-3 flex flex-1 justify-end">
                                 @auth
-                                    <a
-                                        href="{{ url('/dashboard') }}"
-                                        class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                    >
+                                    <a href="{{ getDashboardRoute() }}">
                                         Dashboard
                                     </a>
                                 @else
